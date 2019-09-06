@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Email Testing</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="jumbotron text-center">
+    <h1>Email Testing</h1>
+</div>
+<form>
+
+</form>
+<div class="container">
+
+    <form>
+        <div class="form-group">
+            <label for="userid">User ID</label>
+            <input class="form-control" id="userid" placeholder="Enter User ID" type="text">
+        </div>
+        <label for="event1">Select Event</label>
+        <select class="form-control" id="event1">
+            <option>SignupSuccessful</option>
+            <option>Application_Completed</option>
+            <option>Application_Rejected_Apply_Later</option>
+            <option>Application_Rejected_Hard</option>
+            <option>1st_Reminder</option>
+            <option>2nd_Reminder</option>
+            <option>Case_Closed_Not_Interested</option>
+            <option>Case_Closed_Not_Qualified</option>
+            <option>Case_Closed_Not_Responding</option>
+            <option>Complete_Guarantor_Info</option>
+            <option>Forgot_Password</option>
+            <option>Inform_Guarantor</option>
+            <option>Loan_Agreement_Accepted_Client</option>
+            <option>Loan_Approved</option>
+            <option>Loan_Paid_Back</option>
+            <option>Trust_Pilot</option>
+        </select>
+        <p>
+        </p>
+        <!--<div class="form-check">
+            <input class="form-check-input" id="defaultCheck1" onclick="triggerAllCheck()" type="checkbox" value="">
+            <label class="form-check-label" for="defaultCheck1">
+                Trigger All Mails
+            </label>
+        </div>-->
+        <p>
+        </p>
+        <div onmouseenter="checkID()">
+      <span>
+            <button class="btn btn-primary" id="submit" onclick="submitmail()" type="submit">Submit</button>
+      </span>
+        </div>
+    </form>
+</div>
+<script>
+    function submitmail() {
+        var userid = document.getElementById("userid").value;
+        var event = document.getElementById("event1").value;
+        var checkbox = document.getElementById("defaultCheck1");
+        let eventArray = ["SignupSuccessful", "Application_Completed", "Application_Rejected_Apply_Later", "Application_Rejected_Hard", "1st_Reminder", "2nd_Reminder", "Case_Closed_Not_Interested", "Case_Closed_Not_Qualified", "Case_Closed_Not_Responding", "Complete_Guarantor_Info", "Forgot_Password", "Inform_Guarantor", "Loan_Agreement_Accepted_Client", "Loan_Approved", "Loan_Paid_Back", "Trust_Pilot"];
+
+        var url = "https://spotcap360.int-aws-us.webmethods.io/runflow/run/GV9HtC8s2";
+        var params = "ContactId=" + userid + "&Event=" + event;
+        var http = new XMLHttpRequest();
+
+        /*if (checkbox.checked) {
+            eventArray.forEach(function(element){
+                params = "ContactId=" + userid + "&Event=" + element;
+                // 1. Create a new XMLHttpRequest object
+                var xhr = new XMLHttpRequest();
+
+    // 2. Configure it: GET-request for the URL /article/.../load
+                xhr.open('GET', url + "?" + params);
+
+    // 3. Send the request over the network
+                xhr.send();
+    // 4. This will be called after the response is received
+                xhr.onload = function () {
+                    if (xhr.status != 200) { // analyze HTTP status of the response
+                        console.log(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
+                    } else { // show the result
+                        console.log(`Done, got ${xhr.response.length} bytes`); // responseText is the server
+                    }
+                };
+
+                xhr.onerror = function () {
+                    alert("Request failed");
+                };
+            });
+        }
+        else{
+
+    */
+        // 1. Create a new XMLHttpRequest object
+        let xhr = new XMLHttpRequest();
+
+// 2. Configure it: GET-request for the URL /article/.../load
+        xhr.open('GET', url + "?" + params);
+
+// 3. Send the request over the network
+        xhr.send();
+// 4. This will be called after the response is received
+        xhr.onload = function () {
+            if (xhr.status != 200) { // analyze HTTP status of the response
+                console.log(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
+            } else { // show the result
+                console.log(`Done, got ${xhr.response.length} bytes`); // responseText is the server
+            }
+        };
+
+        xhr.onerror = function () {
+            alert("Request failed");
+        };
+
+        alert("Request was sent to Spotcap - Please wait for up to 5 minutes for the email to show up in your inbox.")
+        //      }
+    }
+
+
+    function triggerAllCheck() {
+        var checkbox = document.getElementById("defaultCheck1");
+        var event1 = document.getElementById("event1");
+        if (checkbox.checked) {
+            event1.setAttribute("disabled", "disabled");
+            event1.value = "N/A"
+        } else {
+            event1.removeAttribute("disabled");
+        }
+    }
+
+    function checkID() {
+        var button = document.getElementById("userid");
+        var userid = button.value;
+        var submit = document.getElementById("submit");
+        if (userid === "") {
+            submit.setAttribute("disabled", "disabled");
+        } else {
+            submit.removeAttribute("disabled");
+        }
+    }
+</script>
+</body>
+</html>
