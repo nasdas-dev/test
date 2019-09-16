@@ -55,13 +55,17 @@
         </p>
         <div onmouseenter="checkID()">
       <span>
-            <button class="btn btn-primary" id="submit" onclick="submitmail()" type="submit">Submit</button>
+            <button class="btn btn-primary" id="submit" onclick="submitmail()" type="button">Submit</button>
       </span>
         </div>
     </form>
 </div>
 <script>
-    function submitmail() {
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function submitmail() {
         var userid = document.getElementById("userid").value;
         var event = document.getElementById("event1").value;
         var checkbox = document.getElementById("defaultCheck1");
@@ -72,18 +76,20 @@
         var http = new XMLHttpRequest();
 
         if (checkbox.checked) {
-            eventArray.forEach(function(element){
-                params = "ContactId=" + userid + "&Event=" + element;
+            for (var i = 0; i < eLength; i++){
+                event = eventArray[i];
+                params = "ContactId=" + userid + "&Event=" + event;
                 // 1. Create a new XMLHttpRequest object
                 var xhr = new XMLHttpRequest();
 
-				// 2. Configure it: GET-request for the URL /article/.../load
+                // 2. Configure it: GET-request for the URL /article/.../load
                 xhr.open('GET', url + "?" + params);
 
-				// 3. Send the request over the network
+                // 3. Send the request over the network
                 xhr.send();
-				
-				// 4. This will be called after the response is received
+                await sleep(2000);
+
+                // 4. This will be called after the response is received
                 xhr.onload = function () {
                     if (xhr.status != 200) { // analyze HTTP status of the response
                         console.log(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
@@ -95,11 +101,8 @@
                 xhr.onerror = function () {
                     alert("Request failed");
                 };
-            });
-        }
-        else{
-			for (var i = 0; i < eLength; i++){
-			event = eventArray[i];
+            };
+        } else{
 			// 1. Create a new XMLHttpRequest object
 			let xhr = new XMLHttpRequest();
 			console.log(params);
@@ -125,7 +128,6 @@
 
 			alert("Request was sent to Spotcap - Please wait for up to 5 minutes for the email to show up in your inbox.")
 			}
-		}
     }
 
 
